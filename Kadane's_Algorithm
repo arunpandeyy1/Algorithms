@@ -1,0 +1,32 @@
+// Solution for https://codeforces.com/problemset/problem/1359/D using Kadane Algorithm("https://en.wikipedia.org/wiki/Maximum_subarray_problem") 
+import java.util.Scanner;
+public class CodeForces 
+{
+    public static void main(String[] args) 
+    {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int a[] = new int[n];
+        for(int i=0;i<n;i++)
+        {
+            a[i] = sc.nextInt();
+        }
+        long ans = 0;
+        for(int i=1;i<31;i++)
+        {
+            long max = 0;
+            for(int j=0;j<n;j++)
+            {
+                if(a[j]>i)
+                {
+                    max = 0;
+                    continue;
+                }
+                max+=a[j];
+                max = Math.max(max, 0);
+                ans = Math.max(ans, max-i);
+            }
+        }
+        System.out.println(ans);
+    }
+}
