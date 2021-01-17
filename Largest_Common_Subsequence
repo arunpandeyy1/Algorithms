@@ -1,0 +1,60 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Largest_Common_Subsequence {
+	public static void main (String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int test=sc.nextInt();
+		while(test-- > 0){
+		    int p=sc.nextInt();             // Take size of both the strings as input
+		    int q=sc.nextInt();
+		    
+		    String s1=sc.next();            // Take both the string as input
+	      String s2=sc.next();
+		    
+		    LCS obj = new LCS();
+		    
+		    System.out.println(obj.lcs(p, q, s1, s2));
+		}
+	}
+}
+
+
+class LCS{
+    // function to find LCS
+    static int a[][] = new int[101][101];
+    LCS()
+    {
+        for(int i=0;i<101;i++)
+        {
+            for(int j=0;j<101;j++)
+            {
+                a[i][j] = -1;
+            }
+        }
+    }
+    static int lcs(int p, int q, String s1, String s2)
+    {
+        if(a[p][q]!=-1) 
+        {
+            return a[p][q];
+        }
+        if(p==0||q==0)
+        {
+            a[p][q] = 0;
+        }
+        else
+        {
+        if(s1.charAt(p-1)==s2.charAt(q-1))
+        {
+            a[p][q] = 1+lcs(p-1, q-1, s1, s2);
+        }
+        else
+        {
+            a[p][q] = Math.max(lcs(p-1, q, s1, s2),lcs(p, q-1, s1, s2));
+        }
+        }
+        return a[p][q];
+    }
+  }
