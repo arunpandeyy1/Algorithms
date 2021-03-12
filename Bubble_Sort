@@ -1,5 +1,5 @@
 import java.util.Scanner;
-
+//O(n^2)
 public class Bubble_Sort 
 {
     private static int[] swap(int a[],int i,int j)
