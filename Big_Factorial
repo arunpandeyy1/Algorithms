@@ -1,0 +1,29 @@
+class Solution {
+    static void multiply(ArrayList<Integer> list,int n)
+    {
+        int carry = 0;
+        int size = list.size();
+        for(int i=0;i<size;i++)
+        {
+            int prod = list.get(i)*n+carry;
+            list.set(i, prod%10);
+            carry = prod/10;
+        } 
+        while(carry>0)
+        {
+            list.add(list.size(), carry%10);
+            carry/=10;
+        }
+    }
+    static ArrayList<Integer> factorial(int N)
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(1);
+        for(int i=2;i<=N;i++)
+        {
+            multiply(list, i);
+        }
+        Collections.reverse(list);
+        return list;
+    }
+}
