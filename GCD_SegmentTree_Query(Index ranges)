@@ -1,0 +1,64 @@
+import java.util.Scanner;
+public class Perfectionist 
+{
+   static int a[] = new int[1000005];
+   //length of segment = 4 x size of array a[];
+   static int st[] = new int[4*1000005];
+   static int gcd(int j,int k)
+   {
+       if(k==0)
+       {
+           return j;
+       }
+       if(j%k==0)
+       {
+           return k;
+       }
+       return gcd(k,j%k);
+   }
+   static void buildST(int index,int low,int high)
+   {
+       if(low==high)
+       {
+           st[index] = a[low];
+           return;
+       }
+       int mid = (low+high)/2;
+       buildST(2*index+1, low, mid);
+       buildST(2*index+2, mid+1, high);
+       st[index] = gcd(st[2*index+1],st[2*index+2]);
+   }
+   static int query(int index,int low,int high,int l,int r)
+   {
+       if(low>=l&&high<=r)
+       {
+           return st[index];
+       }
+       if(high<l||low>r)
+       {
+           return 0;
+       }
+       int mid = (low+high)/2;
+       int left = query(2*index+1, low, mid, l, r);
+       int right = query(2*index+2, mid+1, high, l, r);
+       return gcd(left, right);
+   }
+   public static void main(String[] args) 
+   {
+       Scanner sc = new Scanner(System.in);
+       int n = sc.nextInt();
+       for(int i=0;i<n;i++)
+       {
+           a[i] = sc.nextInt();
+       }
+       buildST(0, 0,n-1);
+       int k = sc.nextInt(); // k = number of queries
+       for(int i=0;i<k;i++)
+       {
+           int l = sc.nextInt();
+           int r = sc.nextInt();
+           int ans = query(0, 0, n-1, l, r);
+           System.out.println(ans);
+       }
+   }
+}
