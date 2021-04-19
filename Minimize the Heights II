@@ -1,0 +1,87 @@
+//https://practice.geeksforgeeks.org/problems/minimize-the-heights3351/1
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Scanner;
+/**
+ * @author Arun Pandey
+ */
+class Point
+{
+    int x,y;
+    Point(int x,int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+class compare implements Comparator<Point>
+{
+    public int compare(Point o1, Point o2) {
+        return o1.x-o2.x;
+    }
+}
+public class Main 
+{
+    static int getMinDiff(int[] a, int n, int k) 
+    {
+        if(n==1) return 0;
+        ArrayList<Point> list = new ArrayList<Point>();
+        int j=0;
+        for(int i=0;i<n;i++)
+        {
+            if(a[i]-k>=0) 
+            {
+                list.add(new Point(a[i]-k, i));
+                j++;
+            }
+            list.add(new Point(a[i]+k, i));
+            j++;
+         }
+        compare com = new compare();
+        Collections.sort(list,com);
+        int b[] = new int[n];
+        for(int i=0;i<n;i++) b[i] = 0;
+        int right = 0,left = 0,elem = 0;
+        while(elem<n&&right<list.size())
+        {
+            if(b[list.get(right).y]==0) elem++;
+            b[list.get(right).y]++;
+            right++;
+        }
+        int ans = list.get(right-1).x-list.get(left).x;
+        while(right<list.size())
+        {
+            if(b[list.get(left).y]==1) elem--;
+            b[list.get(left).y]--;
+            left++;
+            while(right<list.size()&&elem<n)
+            {
+                if(b[list.get(right).y]==0) elem++;
+                b[list.get(right).y]++;
+                right++;
+            }
+            if(elem==n)
+            {
+                ans = Math.min(ans, list.get(right-1).x-list.get(left).x);
+            }
+            else
+            {
+                break;
+            }
+        }
+        return ans;
+    }
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int a[] = new int[n];
+        int k = sc.nextInt();
+        for(int i=0;i<n;i++)
+        {
+            a[i] = sc.nextInt();
+        }
+        System.out.println(getMinDiff(a, n, k));
+    }
+}
