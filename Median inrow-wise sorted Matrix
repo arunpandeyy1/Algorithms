@@ -1,0 +1,115 @@
+import java.io.*;
+import java.util.*;
+
+
+class Main
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while(t-- > 0)
+        {
+            String input_line[] = read.readLine().trim().split("\\s+");
+            int R = Integer.parseInt(input_line[0]);
+            int C = Integer.parseInt(input_line[1]);
+            String line[] = read.readLine().trim().split("\\s+");
+            int matrix[][] = new int[R][C];
+            int c = 0;
+            for(int i = 0; i < R; i++){
+                for(int j = 0; j < C; j++){
+                    matrix[i][j] = Integer.parseInt(line[c++]);
+                }
+            }
+            Solution ob = new Solution();
+            int ans = ob.median(matrix, R, C);
+            System.out.println(ans);
+        }
+    }
+}
+/*
+Idea: find min and max of matrix
+and count elements less than or equal to given element(binary search in each row)
+mid = (max+min)/2;
+and if(count<(r*c+1)/2) min = mid+1
+else if(mid is present&&elem before mid==elem after it) return mid
+else max = mid - 1;
+*/
+class Solution {
+    int BSbefore(int a[],int val)
+    {
+        int low = 0;
+        int high = a.length-1;
+        int index = -1;
+        int mid = (low+high)/2;
+        while(low<=high)
+        {
+            if(a[mid]<=val)
+            {
+                index = mid;
+                low = mid+1;
+            }
+            else
+            {
+                high = mid-1;
+            }
+            mid = (low+high)/2;
+        }
+        return index+1;
+    }
+    boolean ifElem(int a[],int val)
+    {
+        int low = 0;
+        int high = a.length-1;
+        int mid = (low+high)/2;
+        while(low<=high)
+        {
+            if(a[mid]<val)
+            {
+                low = mid+1;
+            }
+            else if(a[mid]>val)
+            {
+                high = mid-1;
+            }
+            else
+            {
+                return true;
+            }
+            mid = (low+high)/2;
+        }
+        return false;
+    }
+    int median(int matrix[][], int r, int c) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for(int i=0;i<r;i++)
+        {
+            max = Math.max(max,matrix[i][c-1]);
+            min = Math.min(min,matrix[i][0]);
+        }
+        int mid = (max+min)/2;
+        int desired = (r*c+1)/2;
+        while(min<=max)
+        {
+            int countb=0;
+            boolean f = false;
+            for(int i=0;i<r;i++)
+            {
+                countb+=BSbefore(matrix[i], mid);
+                 f = f||ifElem(matrix[i],mid);
+            }
+            if(f&&countb-1==r*c-countb) return mid;
+            if(countb<desired)
+            {
+                min = mid+1;
+            }
+            else 
+            {
+                max = mid-1;
+            }
+            mid = (max+min)/2;
+        }
+        return min;
+    }
+}
