@@ -1,0 +1,48 @@
+import java.io.*;
+import java.util.*;
+class Main
+{
+    public static void main(String args[])throws IOException
+    {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            int r = sc.nextInt();
+            int c = sc.nextInt();
+            
+            int matrix[][] = new int[r][c];
+            
+            for(int i = 0; i < r; i++)
+            {
+                for(int j = 0; j < c; j++)
+                 matrix[i][j] = sc.nextInt();
+            }
+            Solution ob = new Solution();
+            ArrayList<Integer> ans = ob.spirallyTraverse(matrix, r, c);
+            for (Integer val: ans) 
+                System.out.print(val+" "); 
+            System.out.println();
+        }
+    }
+}
+
+class Solution
+{
+    static ArrayList<Integer> path(int a[][],ArrayList<Integer> list,int x,int r,int c)
+    {
+        if(x>=r||x>=c) return list;
+        for(int i=x;i<c;i++) list.add(a[x][i]);
+        for(int i=x+1;i<r;i++) list.add(a[i][c-1]);
+        for(int i=c-2;i>=x&&x!=r-1;i--) list.add(a[r-1][i]);
+        for(int i=r-2;i>=x+1&&x!=c-1;i--) list.add(a[i][x]);
+        return path(a, list, x+1, r-1, c-1);
+    }
+    //Function to return a list of integers denoting spiral traversal of matrix.
+    static ArrayList<Integer> spirallyTraverse(int matrix[][], int r, int c)
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        return path(matrix, list, 0, r, c);
+    }
+}
