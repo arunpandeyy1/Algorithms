@@ -1,0 +1,54 @@
+import java.io.*;
+import java.util.*;
+class Main
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while(t-- > 0)
+        {
+            String S = read.readLine();
+            Solution ob = new Solution();
+            System.out.println(ob.longestPalin(S));
+        }
+    }
+}
+class Solution{
+    static String longestPalin(String S)
+    {
+        int maxlen = 1,low = S.length();
+        for(int i=1;i<S.length();i++)
+        {
+            int i1 = i-1,i2 = i;
+            while(i1>=0&&i2<S.length()&&S.charAt(i1)==S.charAt(i2))
+            {
+                i1--;
+                i2++;
+            }
+            i1++;i2--;
+            if(maxlen<i2-i1+1)
+            {
+                maxlen = i2-i1+1;
+                low = i1;
+            }
+        }
+        for(int i=1;i<S.length();i++)
+        {
+            int i1 = i,i2 = i;
+            while(i1>=0&&i2<S.length()&&S.charAt(i1)==S.charAt(i2))
+            {
+                i1--;
+                i2++;
+            }
+            i1++;i2--;
+            if(maxlen<i2-i1+1)
+            {
+                maxlen = i2-i1+1;
+                low = i1;
+            }
+        }
+        if(maxlen==1) return S.substring(0, 1);
+        return S.substring(low, low+maxlen);
+    }
+}
