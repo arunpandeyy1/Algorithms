@@ -1,0 +1,41 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String str = br.readLine().trim();
+            Solution ob = new Solution();
+            int ans = ob.LongestRepeatingSubsequence(str);
+            System.out.println(ans);
+        }
+    }
+}
+class Solution
+{
+    public int LongestRepeatingSubsequence(String str)
+    {
+        int n = str.length();
+        for(int arr[]:Dp)
+        {
+            Arrays.fill(arr,-1);
+        }
+        return dp(0,0,str);
+    }
+    int Dp[][] = new int[501][501];
+    public int dp(int i,int j, String S)
+    {
+           if(i==S.length()||j==S.length()) return 0;
+           if(Dp[i][j]!=-1) return Dp[i][j];
+           if(S.charAt(i) == S.charAt(j) && i!=j)
+                Dp[i][j]=dp(i+1,j+1,S)+1;
+           else
+                Dp[i][j]=Math.max(dp(i,j+1,S), dp(i+1,j,S));
+           return Dp[i][j];
+    }
+}
