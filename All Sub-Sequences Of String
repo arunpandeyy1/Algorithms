@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Main 
+{
+    static ArrayList<String> result = new ArrayList<String>();
+    public static void AllSubseq(String S,String ans)
+    {
+        if(S.length()==0)
+        {
+            result.add(ans);
+            return;
+        }
+        AllSubseq(S.substring(1), ans);
+        AllSubseq(S.substring(1), ans+S.charAt(0));
+    }
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        String S = sc.next();
+        AllSubseq(S, "");
+        System.out.println(result);
+    }
+}
