@@ -1,0 +1,30 @@
+class Solution 
+{
+    public int subarraysWithKDistinct(int[] A, int K) 
+    {
+        return subarraysWithAtmostKDistinct(A,K)-subarraysWithAtmostKDistinct(A,K-1);
+    }
+    public int subarraysWithAtmostKDistinct(int[] A, int K) 
+    {
+        int low=0,high=0,n=A.length,elem=0,ans=0;
+        int freq[] = new int[n+1];
+        while(high<n)
+        {
+            while(elem<=K&&high<n)
+            {
+                if(freq[A[high]]==0) elem++;
+                freq[A[high]]++;
+                high++;
+            }
+            while(elem>K)
+            {
+                ans+=(high-low-1);
+                freq[A[low]]--;
+                if(freq[A[low]]==0) elem--;
+                low++;
+            }
+        }
+        ans+=((high-low)*(high-low+1))/2;
+        return ans;
+    }
+}
