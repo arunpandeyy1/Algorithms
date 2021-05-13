@@ -1,0 +1,82 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            int n = Integer.parseInt(br.readLine().trim());
+            int[] nums = new int[n];
+            String[] S = br.readLine().trim().split(" ");
+            for(int i = 0; i < n; i++)
+                nums[i]  =Integer.parseInt(S[i]);
+            int k = Integer.parseInt(br.readLine().trim());
+            Solution obj = new Solution();
+            int[][] ans = obj.solveWordWrap(nums, k);
+            for(int i = 0; i < ans.length; i++){
+                for(int j = 0; j < ans[i].length; j++){
+                    System.out.print(ans[i][j] + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+}
+
+class Solution
+{
+    public int[][] solveWordWrap (int[] a, int k)
+    {
+        int n = a.length;
+        int cost[][] = new int[n][n];
+        for(int i=0;i<n;i++)
+        {
+            cost[i][i] = k-a[i];
+            for(int j=i+1;j<n;j++)
+            {
+                cost[i][j] = cost[i][j-1]-a[j]-1;
+            }
+        }
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i;j<n;j++)
+            {
+                if(cost[i][j]<0) cost[i][j] = Integer.MAX_VALUE;
+                else cost[i][j]*=cost[i][j];
+            }
+        }
+        int min_cost[] = new int[n];
+        int ans[] = new int[n];
+        for(int i=n-1;i>=0;i--)
+        {
+            min_cost[i] = cost[i][n-1];
+            ans[i] = n;
+            for(int j=n-1;j>i;j--)
+            {
+                if(cost[i][j-1]==Integer.MAX_VALUE) continue;
+                if(min_cost[i]> cost[i][j-1]+min_cost[j])
+                {
+                    min_cost[i] = cost[i][j-1]+min_cost[j];
+                    ans[i] = j;
+                }
+            }
+        }
+        int count=0;
+        for(int i=0;i<n;i=ans[i])
+        {
+            count++;
+        }
+        int fin_ans[][] = new int[count][2];
+        int ii=0;
+        for(int i=0;i<n;i=ans[i],ii++)
+        {
+            fin_ans[ii][0] = i+1;
+            fin_ans[ii][1] = ans[i];
+        }
+        return fin_ans;   
+    }
+}
