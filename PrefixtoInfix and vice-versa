@@ -1,0 +1,43 @@
+import java.util.Stack;
+
+public class av
+{
+    public static void prefixtoinfix(String s)
+    {
+        int n = s.length();
+        Stack stack = new Stack();
+        for(int i=n-1;i>=0;i--)
+        {
+            if(s.charAt(i)=='+'||s.charAt(i)=='-'||s.charAt(i)=='*'||s.charAt(i)=='/')
+            {
+                String c = "("+stack.pop()+""+s.charAt(i)+""+stack.pop()+")";
+                stack.push(c);
+            }
+            else
+            {
+                stack.push(s.charAt(i));
+            }
+        }
+        System.out.println(stack.pop());
+    }
+    
+    public static void postfixtoinfix(String s)
+    {
+        int n = s.length();
+        Stack stack = new Stack();
+        for(int i=0;i<n;i++)
+        {
+            if(s.charAt(i)=='+'||s.charAt(i)=='-'||s.charAt(i)=='*'||s.charAt(i)=='/')
+            {
+                String c = s.charAt(i)+""+stack.pop()+")";
+                String ss = "("+stack.pop()+""+c;
+                stack.push(ss);
+            }
+            else
+            {
+                stack.push(s.charAt(i));
+            }
+        }
+        System.out.println(stack.pop());        
+    }
+}
