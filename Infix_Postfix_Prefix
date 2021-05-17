@@ -1,0 +1,130 @@
+//This code is confined to operators like +,-,*,/
+//You can always add more operators by updating preceding() function
+import java.util.Stack;
+
+public class Conversion
+{
+    public static String prefixtoinfix(String s)
+    {
+        int n = s.length();
+        Stack stack = new Stack();
+        for(int i=n-1;i>=0;i--)
+        {
+            if(s.charAt(i)=='+'||s.charAt(i)=='-'||s.charAt(i)=='*'||s.charAt(i)=='/')
+            {
+                String c = "("+stack.pop()+""+s.charAt(i)+""+stack.pop()+")";
+                stack.push(c);
+            }
+            else
+            {
+                stack.push(s.charAt(i));
+            }
+        }
+        return String.valueOf(stack.pop());
+    }
+    
+    public static String postfixtoinfix(String s)
+    {
+        int n = s.length();
+        Stack stack = new Stack();
+        for(int i=0;i<n;i++)
+        {
+            if(s.charAt(i)=='+'||s.charAt(i)=='-'||s.charAt(i)=='*'||s.charAt(i)=='/')
+            {
+                String c = s.charAt(i)+""+stack.pop()+")";
+                String ss = "("+stack.pop()+""+c;
+                stack.push(ss);
+            }
+            else
+            {
+                stack.push(s.charAt(i));
+            }
+        }
+        return String.valueOf(stack.pop());      
+    }
+    public static int precedence(char c1)
+    {
+        switch(c1)
+        {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            default: return -1;
+        }
+    }
+    public static String infixtopostfix(String s)
+    {
+        Stack<Character> stack = new Stack<Character>();
+        String ans = "";
+        for(int i=0;i<s.length();i++)
+        {
+            if(Character.isLetterOrDigit(s.charAt(i))) ans+=s.charAt(i);
+            else if(s.charAt(i)=='(') stack.push(s.charAt(i));
+            else if(s.charAt(i)=='+'||s.charAt(i)=='-'||s.charAt(i)=='*'||s.charAt(i)=='/')
+            {
+                while(!stack.isEmpty()&&precedence(stack.peek())>=precedence(s.charAt(i)))
+                {
+                    ans+=stack.pop();
+                }
+                stack.push(s.charAt(i));
+            }
+            else if(s.charAt(i)==')')
+            {
+                while(!stack.isEmpty()&&stack.peek()!='(')
+                {
+                    ans+=stack.pop();
+                }
+                stack.pop();
+            }
+        }                                
+        while(!stack.isEmpty())
+        {
+            ans+=stack.pop();
+            System.out.println(stack+" "+ans);
+        }
+        return ans;
+    }
+    
+    public static char[] reverse(char char_arr[])
+    {
+        int n = char_arr.length;
+        int low=0,high=n-1;
+        while(low<high)
+        {
+            char temp = char_arr[low];
+            char_arr[low] = char_arr[high];
+            char_arr[high] = temp;
+            low++;high--;
+        }
+        return char_arr;
+    }
+    public static String infixtoprefix(String s)
+    {
+        int n = s.length();
+        char char_arr[] = s.toCharArray();
+        char_arr = reverse(char_arr);
+        for(int i=0;i<n;i++)
+        {
+            if(char_arr[i]=='(') char_arr[i] = ')';
+            else if(char_arr[i]==')') char_arr[i] = '(';
+        }
+        s = infixtopostfix(String.valueOf(char_arr));
+        char_arr = reverse(s.toCharArray());
+        return String.valueOf(char_arr);
+    }
+    public static String postfixtoprefix(String s)
+    {
+        s = postfixtoinfix(s);
+        s = infixtoprefix(s);
+        return s;
+    }
+    public static String prefixtopostfix(String s)
+    {
+        s = prefixtoinfix(s);
+        s = infixtopostfix(s);
+         return s;
+    }
+}
